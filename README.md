@@ -21,4 +21,7 @@ Variabel http_request dibuat untuk mengumpulkan baris permintaan yang dikirim br
 
 Browser menandai akhir dari permintaan HTTP dengan mengirim dua karakter baris baru secara berurutan, jadi untuk mendapatkan satu permintaan dari stream dan mengambil baris sampai kita mendapatkan baris yang merupakan string kosong. Kemudian dilanjutkan dengan mengumpulkan baris-baris ke dalam vektor dan mencetaknya menggunakan format debug yang cukup sehingga dapat terlihat instruksi yang dikirim browser web ke server.
 
+**Commit 2 Reflection Notes**
+
+![Commit 2 screen capture](/assets/images/commit2.png)
 
