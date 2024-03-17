@@ -61,3 +61,5 @@ Saat ini, pembuatan respon dilakukan di dalam blok if dan else. Kode ini hampir 
 ![Commit 3 screen capture](/assets/images/commit3.png)
 
 **Commit 4 Reflection Notes**
+
+Jika mencoba membuka dua jendela browser dan mengakses ```127.0.0.1/sleep``` di salah satunya dan ```127.0.0.1/``` di tab lainnya, browser membutuhkan waktu untuk memuat halaman. Hal ini terjadi karena server ini adalah server tunggal yang menangani semua permintaan secara berurutan, bukan secara paralel. Jadi, ketika server sedang menangani request ```/sleep``` dan sleep selama lima detik, request lainnya harus menunggu sampai server selesai menangani request tersebut.
