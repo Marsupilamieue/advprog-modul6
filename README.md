@@ -68,3 +68,43 @@ Jika mencoba membuka dua jendela browser dan mengakses ```127.0.0.1/sleep``` di 
 
 Thread pool adalah kumpulan thread yang telah dibuat dan siap untuk menangani suatu tugas. Ketika program menerima tugas baru, ia menugaskan salah satu thread dalam pool untuk menangani tugas tersebut. Thread lainnya dalam pool tersedia untuk menangani tugas lain yang masuk saat thread pertama sedang diproses. Ketika thread pertama selesai memproses tugasnya, thread tersebut dikembalikan ke pool thread yang sedang menunggu, siap untuk menangani tugas baru. Thread pool memungkinkan untuk memproses koneksi secara bersamaan, meningkatkan throughput server Anda.
 
+**Bonus Function improvement**
+
+Berdasarkan dokumentasi Rust, saya berencana untuk mengubah implementasi new menjadi build atau pub fn build(size: usize) -> Result<ThreadPool, PoolCreationError>.
+
+Tahap pertama yang harus dilakukan adalah mengimplementasikan PoolCreationError, seperti berikut
+
+```rust
+pub struct PoolCreationError;
+
+impl fmt::Debug for PoolCreationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Invalid Threadpool size")
+    }
+}
+```
+
+Kemudian, kita perlu menerapkan traits Debug ke dalam PoolCreationError dengan menggunakan library fmt
+
+```rust
+pub fn build(size: usize) -> Result<ThreadPool, PoolCreationError> {
+    if size <= 0 {
+        return Err(PoolCreationError);
+    }
+
+    let (sender, receiver) = mpsc::channel();
+    let receiver = Arc::new(Mutex::new(receiver));
+
+    let mut workers = Vec::with_capacity(size);
+    for id in 0..size {
+        workers.push(Worker::new(id, Arc::clone(&receiver)));
+    }
+
+    Ok(ThreadPool { workers, sender })
+}
+```
+Setelah memperbarui dengan menggunakan build, kita perlu mengganti pembanggilan thread yang ada di file main
+
+```rust
+let pool = ThreadPool::build(4).unwrap();
+```
